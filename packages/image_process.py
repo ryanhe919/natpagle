@@ -3,6 +3,7 @@ import cv2
 import time
 import os
 import numpy as np
+import tkinter as tk
 
 IMAGE_ADDR = './images'
 
@@ -25,7 +26,7 @@ def find_float(src, target, start_x, start_y):
     return start_x + min_loc[0], start_y + min_loc[1], (t_h, t_w)
 
 
-def check_hooked(x, y, t_size, THRESHOLD):
+def check_hooked(x, y, t_size, text, THRESHOLD):
     theh = 0
     no = cv2.imread('./images/float_no.png').astype(np.int32)
     start_time = time.time()
@@ -43,8 +44,8 @@ def check_hooked(x, y, t_size, THRESHOLD):
         if count == 5:
             theh = sum_var / 5 * THRESHOLD
         if np.sum((no.reshape(-1) - yes.reshape(-1)) ** 2) > theh:
-            print('上钩...')
+            text.insert(tk.END, '上钩...\n')
             return True
         if time.time() - start_time > 20:
-            print('超时未上钩...')
+            text.insert(tk.END, '超时未上钩...\n')
             return False
